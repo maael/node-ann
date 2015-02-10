@@ -59,14 +59,16 @@ describe('node-ann', function() {
 			});			
 		});
 		describe('usage', function() {
+			var network;
 			it('creates a network correctly', function() {
 				/*
 				* Network Set Up
 				*/
 
 				/* Variables initialisation */
-				var network = new ann.ann(),
-					inputLayer = new ann.layer({type: 'input'}),
+				network = new ann.ann();
+
+				var	inputLayer = new ann.layer({type: 'input'}),
 					hiddenLayer1 = new ann.layer(),
 					outputLayer = new ann.layer({type: 'output'}),
 					u1 = new ann.perceptron({id: 'u1'}),
@@ -108,10 +110,18 @@ describe('node-ann', function() {
 
 				/* Print out network */
 				//network.print();
-				//network.printGraph();
+				network.printGraph();
 				/*
 				* Network Testing
 				*/
+			});
+			describe('#findPerceptron', function() {
+				it('finds perceptrons correctly', function() {
+					var foundU5 = network.findPerceptron('u5'),
+						noSuchU7 = network.findPerceptron('u7');
+					foundU5.should.be.an('object');
+					(typeof(noSuchU7)).should.equal('undefined');
+				});	
 			});
 		});
 	});
