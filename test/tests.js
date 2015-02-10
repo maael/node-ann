@@ -12,13 +12,17 @@ describe('node-ann', function() {
 		});
 		describe('usage', function() {
 			it('adds perceptron weightings and relationships correctly', function() {
-				var perceptron = new ann.perceptron({id: 'u1'}),
+				var network = new ann.ann(),
+					layer = new ann.layer(),
+					perceptron = new ann.perceptron({id: 'u1'}),
 					weightings;
-				perceptron.addWeighting({to: 'u2', layer: 1, weighting: 1});
-				weightings = perceptron.getWeightings();
+				layer.addPerceptron(perceptron);
+				network.addLayer(layer);
+				network.addWeighting({from: 'u1', to: 'u2', weighting: 1});
+				weightings = network.getWeightings();
 				weightings.should.be.length(1);
+				weightings[0].should.have.property('from');
 				weightings[0].should.have.property('to');
-				weightings[0].should.have.property('layer');
 				weightings[0].should.have.property('weighting');
 			});
 		});
@@ -78,17 +82,14 @@ describe('node-ann', function() {
 					u5 = new ann.perceptron({id: 'u5', bias: -3.92});
 
 				/* Add perceptron relations and weightings */
-				u1.addWeighting({to: 'u3', layer: 1, weight: 3});
-				u1.addWeighting({to: 'u4', layer: 1, weight: 6});
-				u2.addWeighting({to: 'u3', layer: 1, weight: 4});
-				u2.addWeighting({to: 'u4', layer: 1, weight: 5});
-				u3.addWeighting({to: 'u5', layer: 2, weight: 2});
-				u4.addWeighting({to: 'u5', layer: 2, weight: 4});
+				network.addWeighting({from: 'u1', to: 'u3', weight: 3});
+				network.addWeighting({from: 'u1', to: 'u4', weight: 6});
+				network.addWeighting({from: 'u2', to: 'u3', weight: 4});
+				network.addWeighting({from: 'u2', to: 'u4', weight: 5});
+				network.addWeighting({from: 'u3', to: 'u5', weight: 2});
+				network.addWeighting({from: 'u4', to: 'u5', weight: 4});
 
-				u1.getWeightings().should.be.length(2);
-				u2.getWeightings().should.be.length(2);
-				u3.getWeightings().should.be.length(1);
-				u4.getWeightings().should.be.length(1);
+				network.getWeightings().should.be.length(6);
 
 				/* Add perceptrons to layers */
 				inputLayer.addPerceptron(u1);
@@ -123,6 +124,17 @@ describe('node-ann', function() {
 					(typeof(noSuchU7)).should.equal('undefined');
 				});	
 			});
+			describe('#train', function() {
+				it('trains correctly', function() {
+
+				});	
+			});
+			describe('#solve', function() {
+				it('solves correctly', function() {
+					
+				});	
+			});
+			
 		});
 	});
 })
