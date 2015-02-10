@@ -83,6 +83,11 @@ describe('node-ann', function() {
 				u3.addWeighting({to: 'u5', layer: 2, weight: 2});
 				u4.addWeighting({to: 'u5', layer: 2, weight: 4});
 
+				u1.getWeightings().should.be.length(2);
+				u2.getWeightings().should.be.length(2);
+				u3.getWeightings().should.be.length(1);
+				u4.getWeightings().should.be.length(1);
+
 				/* Add perceptrons to layers */
 				inputLayer.addPerceptron(u1);
 				inputLayer.addPerceptron(u2);
@@ -90,10 +95,16 @@ describe('node-ann', function() {
 				hiddenLayer1.addPerceptron(u4);
 				outputLayer.addPerceptron(u5);
 
+				inputLayer.getPerceptrons().should.be.length(2);
+				hiddenLayer1.getPerceptrons().should.be.length(2);
+				outputLayer.getPerceptrons().should.be.length(1);
+
 				/* Add layers to network */
 				network.addLayer(inputLayer);
 				network.addLayer(hiddenLayer1);
 				network.addLayer(outputLayer);
+
+				network.getLayers().should.be.length(3);
 
 				/* Print out network */
 				//network.print();
