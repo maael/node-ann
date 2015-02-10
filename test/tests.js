@@ -97,7 +97,7 @@ describe('node-ann', function() {
 
 				/* Print out network */
 				//network.print();
-
+				//network.printGraph();
 				/*
 				* Network Testing
 				*/
