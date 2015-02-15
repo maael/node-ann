@@ -9,6 +9,22 @@ describe('node-ann', function() {
 				var perceptron = new ann.perceptron();
 				perceptron.should.be.an('object');
 			});
+			it('initialises with bias correctly', function() {
+				var perceptron1 = new ann.perceptron({bias: 0}),
+					perceptron2 = new ann.perceptron({bias: 1}),
+					perceptron3 = new ann.perceptron({bias: -1});
+				perceptron1.getBias().should.be.equal(0);
+				perceptron2.getBias().should.be.equal(1);
+				perceptron3.getBias().should.be.equal(-1);
+			});
+			it('initialises with id correctly', function() {
+				var perceptron1 = new ann.perceptron({id: 'i1'}),
+					perceptron2 = new ann.perceptron({id: 'what'}),
+					perceptron3 = new ann.perceptron({id: '1'});
+				perceptron1.getID().should.be.equal('i1');
+				perceptron2.getID().should.be.equal('what');
+				perceptron3.getID().should.be.equal('1');
+			});
 		});
 		describe('usage', function() {
 			it('adds perceptron weightings and relationships correctly', function() {
@@ -111,7 +127,7 @@ describe('node-ann', function() {
 
 				/* Print out network */
 				//network.print();
-				network.printGraph();
+				//network.printGraph();
 				/*
 				* Network Testing
 				*/
