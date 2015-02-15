@@ -140,6 +140,16 @@ describe('node-ann', function() {
 					(typeof(noSuchU7)).should.equal('undefined');
 				});	
 			});
+			describe('#initialise', function() {
+				it('initialise correctly', function() {
+					network.initialise();
+					var weightings = network.getWeightings();
+					for(var i = 0; i < weightings.length; i++) {
+						weightings[i].weight.should.be.within((-2/2), (2/2));
+					}
+					console.log(network.getWeightings());
+				});	
+			});
 			describe('#train', function() {
 				it('trains correctly', function() {
 
