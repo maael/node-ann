@@ -30,9 +30,13 @@ describe('node-ann', function() {
 			it('adds perceptron weightings and relationships correctly', function() {
 				var network = new ann.ann(),
 					perceptron = new ann.perceptron({id: 'u1'}),
+					perceptron2 = new ann.perceptron({id: 'u2'}),
 					weightings;
 				network.addPerceptron(perceptron);
+				network.addPerceptron(perceptron2);
 				network.addWeighting({from: 'u1', to: 'u2', weighting: 1});
+				network.getPerceptron('u1').getOutputs().should.be.eql(['u2']);
+				network.getPerceptron('u2').getInputs().should.be.eql(['u1']);
 				weightings = network.getWeightings();
 				weightings.should.be.length(1);
 				weightings[0].should.have.property('from');
@@ -89,13 +93,19 @@ describe('node-ann', function() {
 					network.getWeightings().should.be.length(6);
 				});
 			});
-			describe('#findPerceptron', function() {
-				it('finds perceptrons correctly', function() {
-					var foundU5 = network.findPerceptron('u5'),
-						noSuchU7 = network.findPerceptron('u7');
+			describe('#getPerceptron', function() {
+				it('gets a perceptron by id correctly', function() {
+					var foundU5 = network.getPerceptron('u5'),
+						noSuchU7 = network.getPerceptron('u7');
 					foundU5.should.be.an('object');
 					(typeof(noSuchU7)).should.equal('undefined');
 				});	
+			});
+			describe('#findPerceptron', function() {
+				it("gets the index of a perceptron by its' id correctly", function() {
+					var indexU5 = network.findPerceptron('u5');
+					indexU5.should.be.equal(4);
+				});
 			});
 			describe('#initialise', function() {
 				it('initialise correctly', function() {
