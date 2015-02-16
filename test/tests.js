@@ -81,6 +81,15 @@ describe('node-ann', function() {
 					network.getPerceptrons('output').should.be.length(1);
 					network.getPerceptrons().should.be.length(5);
 				});
+				it('adds layer groupings correctly', function() {
+					network.addLayer(['u1', 'u2']);
+					network.addLayer(['u3', 'u4']);
+					network.addLayer(['u5']);
+					
+					network.getLayer(0).should.be.length(2);
+					network.getLayer(1).should.be.length(2);
+					network.getLayer(2).should.be.length(1);
+				});
 				it('adds weightings correctly', function() {
 					/* Add perceptron relations and weightings */
 					network.addWeighting({from: 'u1', to: 'u3', weight: 3});
