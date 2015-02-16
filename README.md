@@ -6,17 +6,7 @@ A node package implementation of a Artificial Neural Network in JavaScript with 
 
 ## Perceptron
 ```js
-    var perceptron = new ann.perceptron({id: 'namedID'});
-```
-
-## Layer
-```js
-    var layer = new ann.layer({type: 'type'});
-```
-
-### addPerceptron()
-```js
-    layer.addPerceptron(perceptron);
+    var perceptron = new ann.perceptron({id: 'namedID', bias: '1', type: 'hidden'});
 ```
 
 ## Network
@@ -24,9 +14,9 @@ A node package implementation of a Artificial Neural Network in JavaScript with 
     var network = new ann.ann();
 ```
 
-### addLayer()
+### addPerceptron()
 ```js
-    network.addLayer(layer);
+    network.addPerceptron(perceptron);
 ```
 
 ### addWeighting()
