@@ -50,51 +50,44 @@ describe('node-ann', function() {
 		});
 		describe('usage', function() {
 			var network;
-			it('creates a network correctly', function() {
-				/*
-				* Network Set Up
-				*/
-
+			describe('network creation', function() {
 				/* Variables initialisation */
 				network = new ann.ann();
 
+				/* Artifical Initialisation */
+				/* Create perceptrons with initial bias */
 				var	u1 = new ann.perceptron({id: 'u1', type: 'input'}),
 					u2 = new ann.perceptron({id: 'u2', bias: 0, type: 'input'}),
 					u3 = new ann.perceptron({id: 'u3'}),
 					u4 = new ann.perceptron({id: 'u4', bias: -6}),
 					u5 = new ann.perceptron({id: 'u5', bias: -3.92, type: 'output'});
+				it('adds perceptrons correctly', function() {
+					/* Add perceptrons to network */
+					/* Add input layer */
+					network.addPerceptron(u1);
+					network.addPerceptron(u2);
+					/* Add hidden layer */
+					network.addPerceptron(u3);
+					network.addPerceptron(u4);
+					/* Add output layer */
+					network.addPerceptron(u5);
 
-				/* Add perceptron relations and weightings */
-				network.addWeighting({from: 'u1', to: 'u3', weight: 3});
-				network.addWeighting({from: 'u1', to: 'u4', weight: 6});
-				network.addWeighting({from: 'u2', to: 'u3', weight: 4});
-				network.addWeighting({from: 'u2', to: 'u4', weight: 5});
-				network.addWeighting({from: 'u3', to: 'u5', weight: 2});
-				network.addWeighting({from: 'u4', to: 'u5', weight: 4});
+					network.getPerceptrons('input').should.be.length(2);
+					network.getPerceptrons('hidden').should.be.length(2);
+					network.getPerceptrons('output').should.be.length(1);
+					network.getPerceptrons().should.be.length(5);
+				});
+				it('adds weightings correctly', function() {
+					/* Add perceptron relations and weightings */
+					network.addWeighting({from: 'u1', to: 'u3', weight: 3});
+					network.addWeighting({from: 'u1', to: 'u4', weight: 6});
+					network.addWeighting({from: 'u2', to: 'u3', weight: 4});
+					network.addWeighting({from: 'u2', to: 'u4', weight: 5});
+					network.addWeighting({from: 'u3', to: 'u5', weight: 2});
+					network.addWeighting({from: 'u4', to: 'u5', weight: 4});
 
-				network.getWeightings().should.be.length(6);
-
-				/* Add perceptrons to network */
-				/* Add input layer */
-				network.addPerceptron(u1);
-				network.addPerceptron(u2);
-				/* Add hidden layer */
-				network.addPerceptron(u3);
-				network.addPerceptron(u4);
-				/* Add output layer */
-				network.addPerceptron(u5);
-
-				network.getPerceptrons('input').should.be.length(2);
-				network.getPerceptrons('hidden').should.be.length(2);
-				network.getPerceptrons('output').should.be.length(1);
-				network.getPerceptrons().should.be.length(5);
-
-				/* Print out network */
-				//network.print();
-				//network.printGraph();
-				/*
-				* Network Testing
-				*/
+					network.getWeightings().should.be.length(6);
+				});
 			});
 			describe('#findPerceptron', function() {
 				it('finds perceptrons correctly', function() {
@@ -106,12 +99,53 @@ describe('node-ann', function() {
 			});
 			describe('#initialise', function() {
 				it('initialise correctly', function() {
-					network.initialise();
-					var weightings = network.getWeightings();
+					/*
+					* Network Set Up
+					*/
+
+					/* Variables initialisation */
+					var networkInit = new ann.ann();
+
+					/* Create perceptrons */
+					var	u1 = new ann.perceptron({id: 'u1', type: 'input'}),
+						u2 = new ann.perceptron({id: 'u2', type: 'input'}),
+						u3 = new ann.perceptron({id: 'u3'}),
+						u4 = new ann.perceptron({id: 'u4'}),
+						u5 = new ann.perceptron({id: 'u5', type: 'output'});
+
+					/* Add perceptrons to network */
+					/* Add input layer */
+					networkInit.addPerceptron(u1);
+					networkInit.addPerceptron(u2);
+					/* Add hidden layer */
+					networkInit.addPerceptron(u3);
+					networkInit.addPerceptron(u4);
+					/* Add output layer */
+					networkInit.addPerceptron(u5);
+
+					networkInit.getPerceptrons('input').should.be.length(2);
+					networkInit.getPerceptrons('hidden').should.be.length(2);
+					networkInit.getPerceptrons('output').should.be.length(1);
+					networkInit.getPerceptrons().should.be.length(5);
+
+					/* Add perceptron relations and weightings */
+					networkInit.addWeighting({from: 'u1', to: 'u3'});
+					networkInit.addWeighting({from: 'u1', to: 'u4'});
+					networkInit.addWeighting({from: 'u2', to: 'u3'});
+					networkInit.addWeighting({from: 'u2', to: 'u4'});
+					networkInit.addWeighting({from: 'u3', to: 'u5'});
+					networkInit.addWeighting({from: 'u4', to: 'u5'});
+
+					networkInit.getWeightings().should.be.length(6);
+
+					/* Network initialisation - sets biases and weightings */
+					networkInit.initialise();
+
+					var weightings = networkInit.getWeightings(),
+						numberOfInputs = networkInit.getPerceptrons('input').length;
 					for(var i = 0; i < weightings.length; i++) {
-						weightings[i].weight.should.be.within((-2/2), (2/2));
+						weightings[i].weight.should.be.within((-2/numberOfInputs), (2/numberOfInputs));
 					}
-					console.log(network.getWeightings());
 				});	
 			});
 			describe('#train', function() {
