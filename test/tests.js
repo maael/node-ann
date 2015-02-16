@@ -56,7 +56,13 @@ describe('node-ann', function() {
 			var network;
 			describe('network creation', function() {
 				/* Variables initialisation */
-				network = new ann.ann();
+				network = new ann.ann({
+					dataFormat: [
+						'input',
+						'input',
+						'output'
+					]
+				});
 
 				/* Artifical Initialisation */
 				/* Create perceptrons with initial bias */
@@ -111,7 +117,7 @@ describe('node-ann', function() {
 				});	
 			});
 			describe('#findPerceptron', function() {
-				it("gets the index of a perceptron by its' id correctly", function() {
+				it('gets the index of a perceptron by id correctly', function() {
 					var indexU5 = network.findPerceptron('u5');
 					indexU5.should.be.equal(4);
 				});
@@ -123,7 +129,13 @@ describe('node-ann', function() {
 					*/
 
 					/* Variables initialisation */
-					var networkInit = new ann.ann();
+					var networkInit = new ann.ann({
+						dataFormat: [
+							'input',
+							'input',
+							'output'
+						]
+					});
 
 					/* Create perceptrons */
 					var	u1 = new ann.perceptron({id: 'u1', type: 'input'}),
@@ -147,6 +159,14 @@ describe('node-ann', function() {
 					networkInit.getPerceptrons('output').should.be.length(1);
 					networkInit.getPerceptrons().should.be.length(5);
 
+					networkInit.addLayer(['u1', 'u2']);
+					networkInit.addLayer(['u3', 'u4']);
+					networkInit.addLayer(['u5']);
+					
+					network.getLayer(0).should.be.length(2);
+					network.getLayer(1).should.be.length(2);
+					network.getLayer(2).should.be.length(1);
+
 					/* Add perceptron relations and weightings */
 					networkInit.addWeighting({from: 'u1', to: 'u3'});
 					networkInit.addWeighting({from: 'u1', to: 'u4'});
@@ -169,12 +189,16 @@ describe('node-ann', function() {
 			});
 			describe('#train', function() {
 				it('trains correctly', function() {
-
+					var trainingSet = [[1],[0],[1]];
+					network.train(trainingSet);
 				});	
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
-					
+					var testSet = {
+
+					};
+					network.solve();
 				});	
 			});
 			
