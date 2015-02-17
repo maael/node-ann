@@ -195,9 +195,7 @@ describe('node-ann', function() {
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
-					var testSet = {
-
-					};
+					var testSet = [];
 					network.solve();
 				});	
 			});
