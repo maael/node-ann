@@ -202,8 +202,8 @@ describe('node-ann', function() {
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
-					var testSet = [[1],[1],[0]];
-					network.solve(testSet);
+					var testSet = [[1],[1]];
+					network.solve(testSet)[0].should.within(0, 0.05);
 				});	
 			});
 			
