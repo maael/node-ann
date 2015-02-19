@@ -62,7 +62,7 @@ describe('node-ann', function() {
 						'input',
 						'output'
 					],
-					epochs: 100000
+					epochs: 10000
 				});
 
 				/* Artifical Initialisation */
@@ -193,16 +193,21 @@ describe('node-ann', function() {
 					this.timeout(10000);
 					// Use XOR test
 					var trainingSet = [
-						[1, 0, 0, 1], // Input 1
-						[0, 1, 0, 1], // Input 2
-						[1, 1, 0, 0]  // Output
+						[1, 0, 0], // Input 1
+						[0, 1, 0], // Input 2
+						[1, 1, 0]  // Output
 					];
-					network.train(trainingSet);
+					var validationSet = [
+						[1], // Input 1
+						[1], // Input 2
+						[0]  // Output
+					];
+					network.train(trainingSet, validationSet);
 				});	
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
-					var testSet = [[1],[1]];
+					var testSet = [[0],[0]];
 					network.solve(testSet)[0].should.within(0, 0.05);
 				});	
 			});
