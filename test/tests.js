@@ -38,10 +38,7 @@ describe('node-ann', function() {
 				network.getPerceptron('u1').getOutputs().should.be.eql(['u2']);
 				network.getPerceptron('u2').getInputs().should.be.eql(['u1']);
 				weightings = network.getWeightings();
-				weightings.should.be.length(1);
-				weightings[0].should.have.property('from');
-				weightings[0].should.have.property('to');
-				weightings[0].should.have.property('weighting');
+				weightings.should.be.an('object');
 			});
 		});
 	});
@@ -106,7 +103,7 @@ describe('node-ann', function() {
 					network.addWeighting({from: 'u3', to: 'u5', weight: 2});
 					network.addWeighting({from: 'u4', to: 'u5', weight: 4});
 
-					network.getWeightings().should.be.length(6);
+					network.getWeightings().should.be.an('object');
 				});
 			});
 			describe('#getPerceptron', function() {
@@ -176,15 +173,17 @@ describe('node-ann', function() {
 					networkInit.addWeighting({from: 'u3', to: 'u5'});
 					networkInit.addWeighting({from: 'u4', to: 'u5'});
 
-					networkInit.getWeightings().should.be.length(6);
+					networkInit.getWeightings().should.be.an('object');
 
 					/* Network initialisation - sets biases and weightings */
 					networkInit.initialise();
 
-					var weightings = networkInit.getWeightings(),
+					var weightMatrix = networkInit.getWeightings(),
 						numberOfInputs = networkInit.getPerceptrons('input').length;
-					for(var i = 0; i < weightings.length; i++) {
-						weightings[i].weight.should.be.within((-2/numberOfInputs), (2/numberOfInputs));
+					for(var from in weightMatrix) {
+						for( var to in weightMatrix[from]) {
+							weightMatrix[from][to].should.be.within((-2/numberOfInputs), (2/numberOfInputs));
+						}
 					}
 				});	
 			});
@@ -207,8 +206,10 @@ describe('node-ann', function() {
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
-					var testSet = [[0],[0]];
-					network.solve(testSet)[0].should.within(0, 0.05);
+					var testSet00 = [[0],[0]],
+						testSet01 = [[0],[1]];
+					network.solve(testSet00)[0].should.within(0, 0.05);
+					network.solve(testSet01)[0].should.within(0.95, 1);
 				});	
 			});
 			
