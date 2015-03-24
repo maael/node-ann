@@ -185,7 +185,17 @@ describe('node-ann', function() {
 							weightMatrix[from][to].should.be.within((-2/numberOfInputs), (2/numberOfInputs));
 						}
 					}
-				});	
+				});
+				describe('#getNetwork', function() {
+					it('returns a representation of the network', function() {
+
+					});
+				});
+				describe('#createNetwork', function() {
+					it('recreates a network from a representation', function() {
+
+					});
+				});
 			});
 			describe('#train', function() {
 				it('trains correctly', function() {
@@ -202,7 +212,10 @@ describe('node-ann', function() {
 						[0]  // Output
 					];
 					network.train(trainingSet, validationSet);
-				});	
+				});
+				it('can be trained again after training', function() {
+
+				});
 			});
 			describe('#solve', function() {
 				it('solves correctly', function() {
