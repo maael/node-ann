@@ -187,8 +187,11 @@ describe('node-ann', function() {
 					}
 				});
 				describe('#getNetwork', function() {
+					var networkRepresentation = networkInit.getNetwork();
 					it('returns a representation of the network', function() {
-
+						networkRepresentation.should.be.an('object');
+						networkRepresentation.layers.should.be.an('array');
+						networkRepresentation.perceptrons.should.be.an('array');
 					});
 				});
 				describe('#createNetwork', function() {
