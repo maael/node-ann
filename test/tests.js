@@ -50,7 +50,8 @@ describe('node-ann', function() {
 			});			
 		});
 		describe('usage', function() {
-			var network;
+			var network,
+				networkInit;
 			describe('network creation', function() {
 				/* Variables initialisation */
 				network = new ann.ann({
@@ -127,7 +128,7 @@ describe('node-ann', function() {
 					*/
 
 					/* Variables initialisation */
-					var networkInit = new ann.ann({
+					networkInit = new ann.ann({
 						dataFormat: [
 							'input',
 							'input',
@@ -161,9 +162,9 @@ describe('node-ann', function() {
 					networkInit.addLayer(['u3', 'u4']);
 					networkInit.addLayer(['u5']);
 					
-					network.getLayer(0).should.be.length(2);
-					network.getLayer(1).should.be.length(2);
-					network.getLayer(2).should.be.length(1);
+					networkInit.getLayer(0).should.be.length(2);
+					networkInit.getLayer(1).should.be.length(2);
+					networkInit.getLayer(2).should.be.length(1);
 
 					/* Add perceptron relations and weightings */
 					networkInit.addWeighting({from: 'u1', to: 'u3'});
@@ -177,7 +178,6 @@ describe('node-ann', function() {
 
 					/* Network initialisation - sets biases and weightings */
 					networkInit.initialise();
-
 					var weightMatrix = networkInit.getWeightings(),
 						numberOfInputs = networkInit.getPerceptrons('input').length;
 					for(var from in weightMatrix) {
@@ -185,19 +185,6 @@ describe('node-ann', function() {
 							weightMatrix[from][to].should.be.within((-2/numberOfInputs), (2/numberOfInputs));
 						}
 					}
-				});
-				describe('#getNetwork', function() {
-					var networkRepresentation = networkInit.getNetwork();
-					it('returns a representation of the network', function() {
-						networkRepresentation.should.be.an('object');
-						networkRepresentation.layers.should.be.an('array');
-						networkRepresentation.perceptrons.should.be.an('array');
-					});
-				});
-				describe('#createNetwork', function() {
-					it('recreates a network from a representation', function() {
-
-					});
 				});
 			});
 			describe('#train', function() {
@@ -228,7 +215,33 @@ describe('node-ann', function() {
 					network.solve(testSet01)[0].should.within(0.95, 1);
 				});	
 			});
-			
+			describe('#getNetwork', function() {
+				it('returns a representation of the network', function() {
+					var networkRepresentation = network.getNetwork();
+					networkRepresentation.should.be.an('object');
+					networkRepresentation.layers.should.be.an('array');
+					networkRepresentation.perceptrons.should.be.an('array');
+					networkRepresentation.weightMatrix.should.be.an('object');
+					networkRepresentation.activations.should.be.an('object');
+					networkRepresentation.deltas.should.be.an('object');
+				});
+			});
+			describe('#createNetwork', function() {
+				it('recreates a network from a representation', function() {
+					var networkCopy = new ann.ann().createNetwork(network.getNetwork());
+					var testSet00 = [[0],[0]],
+						testSet01 = [[0],[1]];
+					networkCopy.solve(testSet00)[0].should.within(0, 0.05);
+					networkCopy.solve(testSet01)[0].should.within(0.95, 1);
+					networkCopy.getLayer(0).should.equal(network.getLayer(0));
+					networkCopy.getLayer(1).should.equal(network.getLayer(1));
+					networkCopy.getLayer(2).should.equal(network.getLayer(2));
+					networkCopy.getPerceptrons().should.equal(network.getPerceptrons());
+					networkCopy.getWeightings().should.equal(network.getWeightings());
+					networkCopy.getNetwork().should.eql(network.getNetwork());
+				});
+			});
+		
 		});
 	});
 })
