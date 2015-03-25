@@ -188,6 +188,7 @@ describe('node-ann', function() {
 				});
 			});
 			describe('#train', function() {
+				var preTrainingNetworkCopy = new ann.ann().createNetwork(network.getNetwork());
 				it('trains correctly', function() {
 					this.timeout(10000);
 					// Use XOR test
@@ -204,7 +205,29 @@ describe('node-ann', function() {
 					network.train(trainingSet, validationSet);
 				});
 				it('can be trained again after training', function() {
-
+					var trainingSet1 = [
+							[1, 0], // Input 1
+							[0, 1], // Input 2
+							[1, 1]  // Output
+						],
+						trainingSet2 = [
+							[0],
+							[0],
+							[0]
+						],
+						validationSet = [
+							[1], // Input 1
+							[1], // Input 2
+							[0]  // Output
+						],
+						testSet00 = [[0],[0]],
+						testSet01 = [[0],[1]];
+					preTrainingNetworkCopy.train(trainingSet1, validationSet);
+					preTrainingNetworkCopy.train(trainingSet2, validationSet);
+					preTrainingNetworkCopy.solve(testSet00)[0].should.within(0, 0.05);
+					preTrainingNetworkCopy.solve(testSet01)[0].should.within(0.95, 1);
+					preTrainingNetworkCopy.solve(testSet00)[0].should.equal(network.solve(testSet00)[0]);
+					preTrainingNetworkCopy.solve(testSet01)[0].should.equal(network.solve(testSet01)[0]);
 				});
 			});
 			describe('#solve', function() {
