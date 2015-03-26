@@ -44,7 +44,7 @@ describe('node-ann', function() {
 				var perceptron = new ann.perceptron({id: 'i1'}),
 					representation = perceptron.getPerceptron();
 				representation.should.be.an('object');
-				representation.options.id.should.equal('i1');
+				representation.perOptions.id.should.equal('i1');
 			});
 			it('can load a perceptron from a representation', function() {
 				var perceptron = new ann.perceptron({id: 'i1'}),
@@ -61,6 +61,7 @@ describe('node-ann', function() {
 		});
 	});
 	describe('#ann', function() {
+		var network;
 		describe('initialisation', function() {
 			it('initialises to an object', function() {
 				var network = new ann.ann();
@@ -68,8 +69,7 @@ describe('node-ann', function() {
 			});			
 		});
 		describe('usage', function() {
-			var network,
-				networkInit;
+			var networkInit;
 			describe('network creation', function() {
 				/* Variables initialisation */
 				network = new ann.ann({
@@ -206,8 +206,9 @@ describe('node-ann', function() {
 				});
 			});
 			describe('#train', function() {
-				var preTrainingNetworkCopy = new ann.ann().createNetwork(network.getNetwork());
+				var preTrainingNetworkCopy;
 				it('trains correctly', function() {
+					preTrainingNetworkCopy = new ann.ann().createNetwork(network.getNetwork());
 					this.timeout(10000);
 					// Use XOR test
 					var trainingSet = [
@@ -277,7 +278,7 @@ describe('node-ann', function() {
 					networkCopy.getLayer(0).should.equal(network.getLayer(0));
 					networkCopy.getLayer(1).should.equal(network.getLayer(1));
 					networkCopy.getLayer(2).should.equal(network.getLayer(2));
-					networkCopy.getPerceptrons().should.equal(network.getPerceptrons());
+					networkCopy.getPerceptrons().length.should.eql(network.getPerceptrons().length);
 					networkCopy.getWeightings().should.equal(network.getWeightings());
 					networkCopy.getNetwork().should.eql(network.getNetwork());
 				});
