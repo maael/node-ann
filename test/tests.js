@@ -40,6 +40,24 @@ describe('node-ann', function() {
 				weightings = network.getWeightings();
 				weightings.should.be.an('object');
 			});
+			it('can return a perceptron representation', function() {
+				var perceptron = new ann.perceptron({id: 'i1'}),
+					representation = perceptron.getPerceptron();
+				representation.should.be.an('object');
+				representation.options.id.should.equal('i1');
+			});
+			it('can load a perceptron from a representation', function() {
+				var perceptron = new ann.perceptron({id: 'i1'}),
+					representation = perceptron.getPerceptron(),
+					perceptronCopy = new ann.perceptron().createPerceptron(representation);
+				perceptronCopy.should.be.an('object');
+				perceptronCopy.getID().should.equal(perceptron.getID());
+				perceptronCopy.getBias().should.equal(perceptron.getBias());
+				perceptronCopy.getType().should.equal(perceptron.getType());
+				perceptronCopy.getInputs().should.equal(perceptron.getInputs());
+				perceptronCopy.getOutputs().should.equal(perceptron.getOutputs());
+				perceptronCopy.getPerceptron().should.eql(perceptron.getPerceptron());
+			});
 		});
 	});
 	describe('#ann', function() {
